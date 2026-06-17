@@ -1,4 +1,25 @@
 Minggu ke 1:
-Kelompok Ima: Udaima Tunnur
-             Amalia Nania
-             Tika Pratiwi
+Kelompok Ima:Udaima Tunnur (Fokus utama anggota ini adalah mengamankan penyimpanan data menggunakan image resmi MySQL/MariaDB.
+                    Tugas Teknis:
+                    Menulis konfigurasi atau script untuk menjalankan container MySQL/MariaDB.
+                    Mengonfigurasi Docker Volumes agar data database tidak hilang (persistent) saat container mati.
+                    Menyambungkan container database ini secara spesifik ke jaringan backend-net.
+                    Tugas Dokumentasi:
+                    Mengambil screenshot bukti volume berhasil dibuat (docker volume ls) dan container database berjalan.
+                    Melakukan commit dan push konfigurasi database ke repositori GitHub.)
+             Amalia Nania (Fokus utama anggota ini adalah menyiapkan "wadah" proyek dan memastikan jalur komunikasi antar-container aman.
+                    Tugas Teknis:
+                    Membuat repositori GitHub dan mengundang anggota lain sebagai collaborator.
+                    Menginisialisasi struktur folder proyek (misalnya folder kerja utama dan file README.md).
+                    Membuat konfigurasi Custom Docker Network (membuat jaringan frontend-net dan backend-net).
+                    Tugas Dokumentasi: Mengambil screenshot struktur folder awal dan bukti jaringan Docker (menggunakan docker network ls).
+                    Mendorong (push) konfigurasi dasar ini ke GitHub sebagai commit pertama.)
+             Tika Pratiwi (Fokus utama anggota ini adalah bagian frontend/app (WordPress) dan memastikan integrasi dengan database berhasil.
+                    Tugas Teknis:
+                    Menulis konfigurasi untuk menjalankan container resmi WordPress.
+                    Melakukan port mapping (misalnya dari port 80 di container ke 8080 di host).
+                    Menyambungkan container WordPress ke dua jaringan: frontend-net (untuk akses luar) dan backend-net (agar bisa berkomunikasi dengan database milik Anggota 2).
+                    Tugas Dokumentasi:
+                    Mengambil screenshot instalasi awal WordPress di browser dan halaman dashboard admin (bukti koneksi ke database sukses).
+                    Melakukan commit dan push konfigurasi WordPress.
+                    Membuat dan mengunggah file kontribusi.txt (atau notepad) ke GitHub yang berisi rekapitulasi pembagian tugas ini.)
