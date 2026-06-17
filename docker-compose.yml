@@ -1,54 +1,95 @@
 version: '3.8'
 
 services:
-  # ==========================================
-  # DATABASE LAYER (Terisolasi)
-  # ==========================================
+  # --- DATABASE LAYER ---
   db:
-    image: mariadb:10.11
+    image: mariadb:10.6
     container_name: wp_database
-    restart: unless-stopped
-    env_file:
-      - .env
-    networks:
-      - backend-net
+    restart: always
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - backend-net
 
-  # ==========================================
-  # APPLICATION LAYER (WordPress)
-  # ==========================================
-  wordpress:
-    image: wordpress:6.4-php8.2-apache
-    container_name: wp_app
-    restart: unless-stopped
-    depends_on:
-      - db
-    ports:
-      - "${WP_PORT}:80"
+  # --- CACHING LAYER ---
+  redis:
+    image: redis:alpine
+    container_name: wp_redis
+    restart: always
+    networks:
+      - backend-net
+
+  # Dashboard untuk memantau trafik Redis (Syarat Screenshot)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: wp_redis_dashboard
+    restart: always
     environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
-      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - backend-net
+      - frontend-net
+
+  # --- STORAGE LAYER (MinIO Simulator S3) ---
+  minio:
+    image: minio/minio
+    container_name: wp_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    env_file: .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    ports:
+      - "9000:9000" # Port API
+      - "9001:9001" # Port Dashboard (Syarat Screenshot)
+    volumes:
+      - minio_data:/data
     networks:
       - frontend-net
       - backend-net
+
+  # --- APP LAYER ---
+  wordpress:
+    image: wordpress:latest
+    container_name: wp_app
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - minio
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    ports:
+      - "8080:80"
     volumes:
       - wp_data:/var/www/html
+    networks:
+      - frontend-net
+      - backend-net
 
-# ==========================================
-# CUSTOM NETWORKS
-# ==========================================
+# --- PERSISTENT VOLUMES ---
+volumes:
+  db_data:
+  wp_data:
+  minio_data: # Tambahan volume untuk penyimpanan awan
+
+# --- NETWORK ISOLATION ---
 networks:
   frontend-net:
     driver: bridge
   backend-net:
     driver: bridge
-
-# ==========================================
-# DOCKER VOLUMES
-# ==========================================
-volumes:
-  db_data:
-  wp_data:
+    internal: true
