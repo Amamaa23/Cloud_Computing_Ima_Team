@@ -45,3 +45,16 @@ Kelompok Ima:Udaima Tunnur
               - Melakukan uji fungsionalitas (functional testing) pada dashboard WordPress pasca-deployment untuk memastikan performa loading page.
               - Melakukan uji coba upload file media secara langsung untuk memastikan sinkronisasi ke objek storage lokal berjalan lancar.
               - Menyusun poin-poin materi dan konsep dasar yang akan digunakan untuk kebutuhan rekaman video demonstrasi final.      
+
+Minggu ke 3:
+Kelompok Ima:   Udaima Tunnur
+                - Melakukan hardening keamanan dengan memindahkan credential ke file .env.
+                - Menguji kembali container setelah penerapan konfigurasi keamanan.
+
+                Amalia Nania
+                - Memeriksa dokumentasi dan konfigurasi keamanan proyek.
+                - Membantu validasi implementasi file .env.
+
+                Tika Pratiwi
+                - Melakukan pengujian fungsionalitas WordPress setelah perubahan konfigurasi.
+                - Memastikan seluruh layanan berjalan normal setelah hardening.
